@@ -1,0 +1,79 @@
+:root {
+  --text: #2b2b33;
+  --text-h: #08060d;
+  --bg: #f7f7fb;
+  --surface: #ffffff;
+  --border: #e0e0e6;
+  --code-bg: #f4f3ec;
+  --accent: #6c3bff;
+  --accent-contrast: #ffffff;
+
+  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --mono: ui-monospace, Consolas, monospace;
+
+  font: 16px/145% var(--sans);
+  color-scheme: light dark;
+  color: var(--text);
+  background: var(--bg);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text: #d6d6de;
+    --text-h: #f3f4f6;
+    --bg: #16171d;
+    --surface: #1f2028;
+    --border: #2e303a;
+    --code-bg: #262832;
+    --accent: #a98bff;
+    --accent-contrast: #16171d;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+#root {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+}
+
+h1,
+h2 {
+  font-family: var(--sans);
+  font-weight: 600;
+  color: var(--text-h);
+}
+
+p {
+  margin: 0;
+}
+
+code {
+  font-family: var(--mono);
+  border-radius: 4px;
+  color: var(--text-h);
+  font-size: 0.9em;
+  padding: 2px 6px;
+  background: var(--code-bg);
+  overflow-wrap: anywhere;
+}
+
+button {
+  font-family: var(--sans);
+  cursor: pointer;
+}
+
+a {
+  color: var(--accent);
+}
