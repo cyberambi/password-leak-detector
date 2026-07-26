@@ -1,0 +1,8 @@
+# Activated via SPRING_PROFILES_ACTIVE=postgres for deployments (e.g. Render)
+# that don't offer free managed MySQL. Local dev and docker-compose stay on
+# MySQL (see application.yml) - only the migration path differs; entity code
+# is unchanged since Hibernate's IDENTITY generation strategy works the same
+# way against both engines.
+spring:
+  flyway:
+    locations: classpath:db/migration/postgresql

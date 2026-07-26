@@ -49,6 +49,14 @@ public class SecurityConfig {
                                 "/api/v1/passwords/check-breach",
                                 "/api/v1/passwords/analyze-strength",
                                 "/api/v1/passwords/generate").permitAll()
+                        // Only present when the frontend is bundled into this app's static
+                        // resources (the Render deployment build - see Dockerfile.render and
+                        // SpaForwardController). The SPA shell itself must load for anonymous
+                        // visitors; it's the SPA's own ProtectedRoute (backed by the real
+                        // /api/v1/passwords/** auth checks above) that gates the protected
+                        // pages client-side.
+                        .requestMatchers("/", "/index.html", "/assets/**", "/favicon.svg", "/icons.svg",
+                                "/register", "/login", "/dashboard", "/history").permitAll()
                         .anyRequest().authenticated())
                 .exceptionHandling(eh -> eh.authenticationEntryPoint(restAuthenticationEntryPoint))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

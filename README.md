@@ -92,6 +92,45 @@ openssl rand -hex 32          # JWT_SECRET
 openssl rand -base64 32       # AES_KEY
 ```
 
+### Deploying to Render (free)
+
+Render's free tier has no managed MySQL, and its static-site hosting can't
+reverse-proxy to a separate service the way nginx does above - splitting
+frontend and backend into two Render services would put them on different
+subdomains, which breaks the `SameSite=Strict` refresh cookie entirely
+(cross-subdomain cookies are blocked by the browser). So the Render deploy
+uses a different shape than local/docker-compose:
+
+- **One** Render web service, built from `Dockerfile.render`, which embeds
+  the built React app into the Spring Boot jar's static resources - the API
+  and the frontend are served from the same origin, so no CORS or cookie
+  issues.
+- Render's free **Postgres** instead of MySQL, activated via the `postgres`
+  Spring profile (`SPRING_PROFILES_ACTIVE=postgres`), which only swaps the
+  Flyway migration path (`db/migration/postgresql` vs `db/migration/mysql`) -
+  entity code is identical either way.
+
+To deploy:
+
+1. Push this repo to GitHub (already done if you're reading this on GitHub).
+2. In the [Render dashboard](https://dashboard.render.com), choose **New >
+   Blueprint** and point it at this repo. Render reads `render.yaml` and
+   provisions the free Postgres database and the free web service, wiring
+   `DATABASE_URL`, `JWT_SECRET`, and `AES_KEY` automatically (the latter two
+   via Render's `generateValue`, which produces a random base64-encoded
+   256-bit value each - long enough for `JWT_SECRET`, and exactly the right
+   size for `AES_KEY`).
+3. First deploy takes a few minutes (Docker build + first Postgres
+   provisioning). The free web service spins down after 15 minutes of
+   inactivity and takes ~30s to wake up on the next request.
+
+This was verified locally end-to-end (a real `postgres:16-alpine` container,
+the actual `Dockerfile.render` image, `SPRING_PROFILES_ACTIVE=postgres`,
+`DATABASE_URL` in Render's `postgresql://user:pass@host:port/db` format)
+before being handed off - register, login, breach-check, history CRUD, the
+SPA shell, and client-side route refreshes (`/history`, `/login`, etc.) all
+confirmed working from the single origin.
+
 ### Local development (without Docker)
 
 Backend (needs JDK 17; MySQL running locally or exposed from the compose
@@ -153,7 +192,9 @@ npm run lint          # oxlint
 password-leak-detector/
 ├── backend/              # Spring Boot API (Maven)
 ├── frontend/             # React app (Vite)
-├── docker-compose.yml    # wires backend, frontend, mysql
+├── docker-compose.yml    # local/dev: backend, frontend, mysql (two-container + nginx proxy)
+├── Dockerfile.render     # Render deploy: frontend bundled into the backend jar (single origin)
+├── render.yaml           # Render Blueprint - free web service + free Postgres
 ├── .env.example          # copy to .env and fill in real secrets
 └── CLAUDE.md             # project conventions for AI-assisted development
 ```
