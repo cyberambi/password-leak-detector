@@ -5,7 +5,12 @@ export default function ProtectedRoute({ children }) {
   const { isAuthenticated, isLoading } = useAuth();
 
   if (isLoading) {
-    return <div className="page-loading">Loading...</div>;
+    return (
+      <div className="page-loading">
+        <span className="spinner" aria-hidden="true" />
+        Loading...
+      </div>
+    );
   }
 
   if (!isAuthenticated) {

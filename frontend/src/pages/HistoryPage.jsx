@@ -64,7 +64,10 @@ export default function HistoryPage() {
       <h1>Password history</h1>
       {error && <p className="form-error">{error}</p>}
       {isLoading ? (
-        <p>Loading...</p>
+        <div className="page-loading">
+          <span className="spinner" aria-hidden="true" />
+          Loading...
+        </div>
       ) : (
         <>
           <HistoryList entries={entries} onEdit={handleEdit} onDelete={handleDelete} />

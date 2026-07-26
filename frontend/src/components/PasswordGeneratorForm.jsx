@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { generatePassword } from '../api/passwordApi';
+import { extractErrorMessage } from '../api/errorMessage';
 
 export default function PasswordGeneratorForm() {
   const [length, setLength] = useState(16);
@@ -28,7 +29,7 @@ export default function PasswordGeneratorForm() {
       setGenerated(data.password);
     } catch (err) {
       setGenerated('');
-      setError(err.response?.data?.message ?? 'Could not generate a password right now.');
+      setError(extractErrorMessage(err, 'Could not generate a password right now.'));
     } finally {
       setIsLoading(false);
     }
@@ -94,7 +95,7 @@ export default function PasswordGeneratorForm() {
       {generated && (
         <div className="generated-password">
           <code>{generated}</code>
-          <button type="button" onClick={handleCopy}>
+          <button type="button" onClick={handleCopy} className={copied ? 'pop' : ''}>
             {copied ? 'Copied!' : 'Copy'}
           </button>
         </div>

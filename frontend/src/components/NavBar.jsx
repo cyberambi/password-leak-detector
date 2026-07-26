@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 
 export default function NavBar() {
@@ -18,8 +18,8 @@ export default function NavBar() {
       <div className="navbar-links">
         {isAuthenticated ? (
           <>
-            <Link to="/dashboard">Dashboard</Link>
-            <Link to="/history">History</Link>
+            <NavLink to="/dashboard">Dashboard</NavLink>
+            <NavLink to="/history">History</NavLink>
             <span className="navbar-username">{username}</span>
             <button type="button" onClick={handleLogout}>
               Log out
@@ -27,8 +27,8 @@ export default function NavBar() {
           </>
         ) : (
           <>
-            <Link to="/login">Log in</Link>
-            <Link to="/register">Register</Link>
+            <NavLink to="/login">Log in</NavLink>
+            <NavLink to="/register">Register</NavLink>
           </>
         )}
       </div>

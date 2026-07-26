@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { extractErrorMessage } from '../api/errorMessage';
 
 const EMPTY = { siteName: '', siteUrl: '', siteUsername: '', password: '', notes: '' };
 
@@ -22,7 +23,7 @@ export default function HistoryEntryForm({ initialValues, onSubmit, onCancel, su
     try {
       await onSubmit(values);
     } catch (err) {
-      setError(err.response?.data?.message ?? 'Could not save this entry. Please try again.');
+      setError(extractErrorMessage(err, 'Could not save this entry. Please try again.'));
     } finally {
       setIsSaving(false);
     }

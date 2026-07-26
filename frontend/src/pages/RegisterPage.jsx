@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import { extractErrorMessage } from '../api/errorMessage';
 
 export default function RegisterPage() {
   const { register } = useAuth();
@@ -23,7 +24,7 @@ export default function RegisterPage() {
       await register(username, password);
       navigate('/login', { state: { registered: true } });
     } catch (err) {
-      setError(err.response?.data?.message ?? 'Registration failed. Please try again.');
+      setError(extractErrorMessage(err, 'Registration failed. Please try again.'));
     } finally {
       setIsSubmitting(false);
     }
@@ -41,6 +42,7 @@ export default function RegisterPage() {
           autoComplete="username"
           required
         />
+        <p className="field-hint">Letters, digits, &quot;.&quot;, &quot;_&quot; and &quot;-&quot; only - not an email address.</p>
         <input
           type="password"
           placeholder="Password"

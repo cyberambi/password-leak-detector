@@ -6,6 +6,10 @@
 ![MySQL](https://img.shields.io/badge/MySQL-8-4479A1)
 ![License](https://img.shields.io/badge/License-MIT-lightgrey)
 
+**Live demo:** https://password-leak-detector.onrender.com
+(free tier - the instance spins down after 15 min idle, so the first request
+after a while can take ~30-50s to wake up)
+
 A full-stack web app for checking whether a password has appeared in a known
 data breach, scoring password strength, generating cryptographically secure
 passwords, and storing an encrypted, per-user password history.

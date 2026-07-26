@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import { extractErrorMessage } from '../api/errorMessage';
 
 export default function LoginPage() {
   const { login } = useAuth();
@@ -21,7 +22,7 @@ export default function LoginPage() {
       await login(username, password);
       navigate('/dashboard');
     } catch (err) {
-      setError(err.response?.data?.message ?? 'Login failed. Please check your credentials.');
+      setError(extractErrorMessage(err, 'Login failed. Please check your credentials.'));
     } finally {
       setIsSubmitting(false);
     }
