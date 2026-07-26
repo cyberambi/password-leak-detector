@@ -1,0 +1,9 @@
+# Force LF regardless of the cloning machine's core.autocrlf setting - shell
+# scripts (like backend/mvnw) get their shebang corrupted by a CRLF checkout,
+# which breaks them on any Linux build host (Docker, Render, CI...) even
+# though everything looks fine on Windows.
+* text=auto eol=lf
+
+# Windows batch/cmd files should keep native CRLF.
+*.cmd text eol=crlf
+*.bat text eol=crlf
